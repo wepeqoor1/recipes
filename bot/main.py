@@ -205,7 +205,7 @@ def get_user_phone_number(update: Update, context: CallbackContext) -> States:
         context.user_data["phone_number"] = update.message.text
 
     user_telegram_id = update.message.from_user.id
-    url = f"http://127.0.0.1:8000/api/users/add/"
+    url = "http://127.0.0.1:8000/api/users/add/"
     payload = {
         "user_tg_id": user_telegram_id,
         "user_fullname": context.user_data["fullname"],
@@ -239,7 +239,7 @@ def get_categories(update: Update, context: CallbackContext) -> States:
     """
     Отрисовываем клавиатуру с рецептами
     """
-    url = f"http://127.0.0.1:8000/api/categories/"
+    url = "http://127.0.0.1:8000/api/categories/"
     response = requests.get(url)
     response.raise_for_status()
     categories = response.json()
@@ -757,10 +757,10 @@ def show_favorite_recipe(update: Update, context: CallbackContext) -> States:
     if response.ok:
         recipe = response.json()
         ingredients = recipe.get('recipe_ingredients')
-        parsed_ingredients = ""
-        for ingredient in ingredients:
-            parsed_ingredients += \
-                f"{' - '.join([str(item) for item in ingredient])} грамм\n"
+        parsed_ingredients = "".join(
+            f"{' - '.join([str(item) for item in ingredient])} грамм\n"
+            for ingredient in ingredients
+        )
 
         menu_msg = dedent(f"""\
             <b>{recipe.get('recipe_name')}</b>
